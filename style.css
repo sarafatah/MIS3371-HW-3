@@ -1,9 +1,9 @@
 /*
 Name: Sara Fatah
 Date created: 06/10/2025
-Date last edited: 06/13/2025
+Date last edited: 07/02/2025
 Version: 1.0
-Description: Homework 1 CSS 
+Description: Homework 3 CSS 
 */
 
 header {
@@ -118,4 +118,9 @@ input:invalid, textarea:invalid, select:invalid {
 
 input:valid, textarea:valid, select:valid {
     border-color: #5cb85c;
+}
+
+.form-group {
+    margin-bottom: 1.5em;
+    min-height: 5em;
 }
