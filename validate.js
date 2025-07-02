@@ -248,6 +248,51 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+ 
+ // Password Validation
+function validatePassword() {
+    const password = document.getElementById('password').value;
+    const username = document.getElementById('userid').value.toLowerCase();
+    const errorElement = document.getElementById('passwordError');
+    
+    let errors = [];
+    if (password.length < 8) errors.push("Minimum 8 characters");
+    if (!/[A-Z]/.test(password)) errors.push("1 uppercase letter");
+    if (!/[a-z]/.test(password)) errors.push("1 lowercase letter");
+    if (!/[0-9]/.test(password)) errors.push("1 number");
+    if (password.includes(username)) errors.push("Cannot contain username");
+    
+    errorElement.textContent = errors.join(", ");
+    return errors.length === 0;
+}
+
+// Password Match Validation
+function validatePasswordMatch() {
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirmpassword').value;
+    const errorElement = document.getElementById('confirmpasswordError');
+    
+    if (!password || !confirm) {
+        errorElement.textContent = "";
+        return true;
+    }
+    
+    if (password !== confirm) {
+        errorElement.textContent = "Passwords do not match";
+        return false;
+    }
+    
+    errorElement.textContent = "";
+    return true;
+}
+
+// Event Listeners
+document.getElementById('password').addEventListener('input', function() {
+    validatePassword();
+    validatePasswordMatch();
+});
+document.getElementById('confirmpassword').addEventListener('input', validatePasswordMatch);
+
     // Salary Slider and Label
     const salarySlider = document.getElementById("salary");
     const salaryLabel = document.getElementById("salaryLabel");
@@ -256,7 +301,41 @@ document.addEventListener("DOMContentLoaded", function () {
             salaryLabel.textContent = formatCurrency(salarySlider.value);
         });
     }
+// Email Validation
+document.getElementById('email').addEventListener('input', function() {
+    const email = this.value.toLowerCase();
+    const errorElement = document.getElementById('emailError');
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    errorElement.textContent = pattern.test(email) ? "" : "Invalid email format";
+});
 
+// SSN Auto-Formatting
+document.getElementById('ssn').addEventListener('input', function(e) {
+    let val = e.target.value.replace(/\D/g, '');
+    if (val.length > 3) val = val.slice(0,3) + '-' + val.slice(3);
+    if (val.length > 6) val = val.slice(0,6) + '-' + val.slice(6);
+    e.target.value = val.slice(0,11);
+});
+
+// Date of Birth Validation
+document.getElementById('dob').addEventListener('change', function() {
+    const dob = new Date(this.value);
+    const today = new Date();
+    const minDate = new Date();
+    minDate.setFullYear(today.getFullYear() - 120);
+    const errorElement = document.getElementById('dobError');
+    
+    if (dob > today) {
+        errorElement.textContent = "Cannot be future date";
+        this.value = "";
+    } else if (dob < minDate) {
+        errorElement.textContent = "Cannot be older than 120 years";
+        this.value = "";
+    } else {
+        errorElement.textContent = "";
+    }
+});
+ 
     // Home Budget Sliders and Labels
     const minPriceSlider = document.getElementById("minPrice");
     const maxPriceSlider = document.getElementById("maxPrice");
@@ -273,7 +352,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* ========== Review Button Click (Show Modal with Summary) ========== */
+    /* Review Button Click (Show Modal with Summary) */
     if (reviewBtn && modal && reviewContent) {
         reviewBtn.addEventListener("click", function () {
             // Validate passwords first
@@ -281,20 +360,20 @@ document.addEventListener("DOMContentLoaded", function () {
             const confirmPassword = getValue("confirmpassword");
             
             if (password !== confirmPassword) {
-                alert("❌ Passwords do not match.");
+                alert("Passwords do not match.");
                 return;
             }
             
             const uid = getValue("userid").toLowerCase();
             if (password.toLowerCase().includes(uid)) {
-                alert("❌ Password cannot contain the User ID.");
+                alert("Password cannot contain the User ID.");
                 return;
             }
 
             const fname = getValue("firstname").toLowerCase();
             const lname = getValue("lastname").toLowerCase();
             if (password.toLowerCase().includes(fname) || password.toLowerCase().includes(lname)) {
-                alert("❌ Password cannot contain your first or last name.");
+                alert("Password cannot contain your first or last name.");
                 return;
             }
 
@@ -305,7 +384,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const today = new Date();
                 const maxDOB = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
                 if (dob > today || dob < maxDOB) {
-                    alert("❌ Date of Birth must be within the past 120 years.");
+                    alert("Date of Birth must be within the past 120 years.");
                     return;
                 }
             }
@@ -355,6 +434,35 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("click", function(event) {
         if (event.target === modal) {
             modal.style.display = "none";
+
+
+    // Final Form Validation
+function isFormValid() {
+    return validatePassword() && 
+           validatePasswordMatch() &&
+           document.getElementById('firstname').checkValidity() &&
+           document.getElementById('lastname').checkValidity() &&
+           document.getElementById('email').checkValidity() &&
+           document.getElementById('dob').checkValidity();
+}
+
+    // Submit Button Control
+    const submitBtn = document.createElement('input');
+    submitBtn.type = 'submit';
+    submitBtn.value = 'Submit';
+    submitBtn.id = 'submitBtn';
+    submitBtn.disabled = true;
+    document.querySelector('form').appendChild(submitBtn);
+    
+    // Enable/Disable Submit Button
+    function checkForm() {
+        document.getElementById('submitBtn').disabled = !isFormValid();
+    }
+    
+    // Check form on any input change
+    document.querySelectorAll('input, select').forEach(el => {
+        el.addEventListener('input', checkForm);
+});
         }
     });
 });
