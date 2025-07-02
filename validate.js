@@ -396,8 +396,14 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+ 
+    function confirmSubmit() {
+    const form = document.getElementById("registrationForm");
+    if (form) form.submit();
+}
 
-    /* ========== Modal Close Handling ========== */
+    
+    /* Modal Close Handling */
     const modalCloseButtons = modal ? modal.querySelectorAll(".close, .btn-close, .close-modal") : [];
     modalCloseButtons.forEach(btn => {
         btn.addEventListener("click", () => {
