@@ -103,15 +103,22 @@ Description: patient registration form
                 </tr>
 
                 <!-- CITY STATE AND ZIP --> 
-
-                <tr>
-                   <td class="td1" colspan="4">
-                    <label for="city">City:</label>
-                    <input type="text" name="city" id="city" maxlength="30" size "18">
+        
+                        <tr>
+            <td class="td1"><label>Location:</label></td>
+            <td colspan="3">
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <!-- City -->
+                    <div style="flex: 1; min-width: 120px;">
+                        <input type="text" name="city" id="city" maxlength="30" required 
+                               placeholder="City" style="width: 100%;">
                         <span class="error-message" id="cityError"></span>
-                          <label for="state">State:</label>
-                    <select id="state" name="state" >
-                            <option value="" disabled selected>Select State</option>
+                    </div>
+                    
+                    <!-- State -->
+                    <div style="flex: 1; min-width: 120px;">
+                        <select id="state" name="state" required style="width: 100%;">
+                    <option value="" disabled selected>State</option>
                             <option value="AL">Alabama</option>
                             <option value="AK">Alaska</option>
                             <option value="AZ">Arizona</option>
@@ -164,16 +171,19 @@ Description: patient registration form
                             <option value="WI">Wisconsin</option>
                             <option value="WY">Wyoming</option>
                             <option value="PR">Puerto Rico</option>
-                        </select>
-                       <span class="error-message" id="stateError"></span>
-                
-                       <label for="zip">Zip Code:</label>
-                        <input type="text" name="zip" id="zip" maxlength="10">
-                       <span class="error-message" id="zipError"></span>
+                            </select>
+                        <span class="error-message" id="stateError"></span>
+                            </div>
+                            
+                            <!-- Zip -->
+                            <div style="flex: 1; min-width: 100px;">
+                                <input type="text" name="zip" id="zip" maxlength="10" required 
+                                       placeholder="Zip Code" style="width: 100%;">
+                                <span class="error-message" id="zipError"></span>
+                            </div>
+                        </div>
                     </td>
                 </tr>
-                
-
                 <!-- EMAIL AND PHONE NO. -->
                <tr>
                       <td class="td1"><label for="email">Email Address:</label></td>
