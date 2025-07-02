@@ -50,16 +50,19 @@ Description: patient registration form
                     <td><input type="text" name="firstname" id="firstname" maxlength="30" required
                            pattern="[a-zA-Z'-]{1,30}"
                            title="Letters, apostrophes, and dashes only. Max 30 characters.">
+                        <span class="error-message" id="firstnameError"></span>
                     </td>
                     <td class="td1"><label for="midinitial">Middle Initial:</label></td>
                     <td><input type="text" name="midinitial" id="midinitial" maxlength="1" size="3"
                            pattern="[a-zA-Z]?"
                            title="One letter only (optional)">
+                        <span class="error-message" id="midinitialError"></span>
                     </td>
                     <td class="td1"><label for="lastname">Last Name:</label></td>
                     <td><input type="text" name="lastname" id="lastname" maxlength="30" required
                            pattern="[a-zA-Z'\-2-5]{1,30}"
                            title="Letters, apostrophes, numbers 2–5, and dashes only. Max 30 characters.">
+                        <span class="error-message" id="lastnameError"></span>
                     </td>
                 </tr>
 
@@ -69,23 +72,34 @@ Description: patient registration form
                     <td><input type="date" id="dob" name="dob"
                            min="1905-07-21" max="2025-06-21"
                            required>
+                        <span class="error-message" id="dobError"></span>
                     </td>
                 </tr>
 
                 <!-- SSN -->
                 <tr>
                     <td class="td1"><label for="ssn">Social Security:</label></td>
-                    <td><input type="password" name="ssn" id="ssn" maxlength="11" required></td>
+                    <td>
+                        <input type="password" name="ssn" id="ssn" maxlength="11" required>
+                         <span class="error-message" id="ssnError"></span>
+                    </td>
+                    
                 </tr>
 
                 <!-- ADDRESS -->
                 <tr>
                     <td class="td1"><label for="address1">Address Line 1:</label></td>
-                    <td><input type="text" name="address1" id="address1" maxlength="30" required></td>
+                    <td>
+                        <input type="text" name="address1" id="address1" maxlength="30" required>
+                        <span class="error-message" id="address1Error"></span>
+                    </td>
                 </tr>
                 <tr>
                     <td class="td1"><label for="address2">Address Line 2:</label></td>
-                    <td><input type="text" name="address2" id="address2" maxlength="30" placeholder="Apt, suite, unit, etc."></td>
+                    <td>
+                        <input type="text" name="address2" id="address2" maxlength="30" placeholder="Apt, suite, unit, etc.">
+                        <span class="error-message" id="address2Error"></span>
+                    </td>
                 </tr>
 
                 <!-- CITY STATE AND ZIP --> 
@@ -94,7 +108,7 @@ Description: patient registration form
                    <td class="td1" colspan="4">
                     <label for="city">City:</label>
                     <input type="text" name="city" id="city" maxlength="30" size "18" required style="width: 140px; margin-right: 20px;">
-
+                        <span class="error-message" id="cityError"></span>
                           <label for="state">State:</label>
                     <select id="state" name="state" required style="width: 140px; margin-right: 20px;">
                             <option value="" disabled selected>Select State</option>
@@ -151,9 +165,11 @@ Description: patient registration form
                             <option value="WY">Wyoming</option>
                             <option value="PR">Puerto Rico</option>
                         </select>
+                       <span class="error-message" id="stateError"></span>
                 
                        <label for="zip">Zip Code:</label>
                         <input type="text" name="zip" id="zip" maxlength="10" required style="width: 100px;">
+                       <span class="error-message" id="zipError"></span>
                     </td>
                 </tr>
                 
@@ -166,6 +182,7 @@ Description: patient registration form
                                pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
                                title="Enter a valid email like name@domain.tld"
                                required>
+                           <span class="error-message" id="emailError"></span>
                       </td>
                     
                       <td class="td1"><label for="phone">Phone #:</label></td>
@@ -175,6 +192,7 @@ Description: patient registration form
                                maxlength="12"
                                title="Format: 000-000-0000 (digits only, use dashes)"
                                required>
+                          <span class="error-message" id="phoneError"></span>
                       </td>
              </tr>
 
@@ -190,6 +208,7 @@ Description: patient registration form
                         <input type="checkbox" id="smallpox" value="Small Pox"> Small Pox
                         <input type="checkbox" id="tetanus" value="Tetanus"> Tetanus
                     </div>
+                     <span class="error-message" id="conditionsError"></span>
                 </td> 
             </tr>
 
@@ -200,6 +219,7 @@ Description: patient registration form
                     placeholder="Enter your symptoms here:"
                     pattern='^[^"]*$'
                     title='Double quotes (") are not allowed.'></textarea>
+                         <span class="error-message" id="notesError"></span>
                     </td>
                 </tr>
 
@@ -210,6 +230,8 @@ Description: patient registration form
                         <input type="radio" name="gender" value="Male"> Male
                         <input type="radio" name="gender" value="Female"> Female
                         <input type="radio" name="gender" value="Other"> Other
+                
+                        <span class="error-message" id="genderError"></span>
                     </td>
                 </tr>
 
@@ -218,6 +240,7 @@ Description: patient registration form
                     <td colspan="3">
                         <input type="radio" name="vaccinated" value="Yes"> Yes
                         <input type="radio" name="vaccinated" value="No"> No
+                        <span class="error-message" id="vaccinationError"></span>
                     </td>
                 </tr>
 
@@ -226,6 +249,7 @@ Description: patient registration form
                     <td colspan="3">
                         <input type="radio" name="insurance" value="Yes"> Yes
                         <input type="radio" name="insurance" value="No"> No
+                        <span class="error-message" id="insuranceError"></span>
                     </td>
                 </tr>
 
@@ -235,6 +259,7 @@ Description: patient registration form
                     <td colspan="3">
                         <input type="range" name="range" id="range" min="1" max="10" value="5">
                         <span id="range-slider"></span>
+                        <span class="error-message" id="healthRatingError"></span>
                     </td>
                 </tr>
 
@@ -243,6 +268,7 @@ Description: patient registration form
                   <td colspan="3">
                     <input type="range" name="salary" id="salary" min="20000" max="200000" step="1000" value="60000" oninput="updateSalaryLabel(this.value)">
                     <span id="salaryLabel">$60,000</span> <br>
+                      <span class="error-message" id="desiredSalaryError"></span>
                   </td>
                 </tr>
 
@@ -253,14 +279,16 @@ Description: patient registration form
                 <div style="margin-bottom: 15px;">
                   <label for="minPrice" style="display:inline-block; width: 60px;">Min:</label>
                   <input type="range" id="minPrice" name="minPrice" min="50000" max="1000000" step="10000" value="100000" style="width: 300px;">
-                  <span id="minPriceLabel" style="margin-left: 10px;">$100,000</span>
+                  <span id="minPriceLabel" style="margin-left: 10px;">$100,000</span>    
                 </div>
-            
+                  
+                <span class="error-message" id="minValueError"></span>
                 <div>
                   <label for="maxPrice" style="display:inline-block; width: 60px;">Max:</label>
                   <input type="range" id="maxPrice" name="maxPrice" min="50000" max="1000000" step="10000" value="500000" style="width: 300px;">
                   <span id="maxPriceLabel" style="margin-left: 10px;">$500,000</span>
                 </div>
+                  <span class="error-message" id="maxValueError"></span>
               </td>
             </tr>
 
@@ -269,6 +297,7 @@ Description: patient registration form
                     <td class="td1"><label for="userid">User ID:</label></td>
                     <td><input type="text" name="userid" id="userid" maxlength="30" pattern="^[A-Za-z][A-Za-z0-9_-]{4,29}$"
                         title="5-30 characters. Must start with a letter. Letters, digits, underscore or dash only." required>
+                        <span class="error-message" id="useridError"></span>
                     </td>
                 </tr>
 
@@ -277,6 +306,7 @@ Description: patient registration form
                     <td><input type="password" name="password" id="password" minlength="8" maxlength="30"
                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s\"])[^\"]+$"
                     title="8–30 characters. Must include uppercase, lowercase, digit, and a special character. No quotes." required>
+                        <span class="error-message" id="passwordError"></span>
                     </td>
                 </tr>
 
@@ -285,6 +315,7 @@ Description: patient registration form
                     <td><input type="password" name="confirmpassword" id="confirmpassword" minlength="8" maxlength="30"
                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s\"])[^\"]+$"
                     title="8–30 characters. Must include uppercase, lowercase, digit, and a special character. No quotes." required>
+                        <span class="error-message" id="confirmpasswordError"></span>
                     </td>
                 </tr>
 
