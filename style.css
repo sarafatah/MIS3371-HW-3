@@ -103,3 +103,9 @@ p {
     font-family: "Optima", sans-serif;
     font-weight: normal;
 }
+
+.error-message {
+  color: red;
+  font-size: 0.8em;
+  margin-left: 10px;
+}
