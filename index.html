@@ -39,25 +39,25 @@ Description: patient registration form
 <hr>
 
 <!-- FORM START -->
-<form action="thankyou.html">
+<form id="registrationForm" action="thankyou.html">
     <center>
         <div class="format">
             <table>
 
                 <!-- NAME SECTION -->
                 <tr>
-                    <td class="td1"><label for="fname">First Name:</label></td>
-                    <td><input type="text" name="fname" id="fname" maxlength="30" required
+                    <td class="td1"><label for="firstname">First Name:</label></td>
+                    <td><input type="text" name="firstname" id="firstname" maxlength="30" required
                            pattern="[a-zA-Z'-]{1,30}"
                            title="Letters, apostrophes, and dashes only. Max 30 characters.">
                     </td>
-                    <td class="td1"><label for="mname">Middle Initial:</label></td>
-                    <td><input type="text" name="mname" id="mname" maxlength="1" size="3"
+                    <td class="td1"><label for="midinitial">Middle Initial:</label></td>
+                    <td><input type="text" name="midinitial" id="midinitial" maxlength="1" size="3"
                            pattern="[a-zA-Z]?"
                            title="One letter only (optional)">
                     </td>
-                    <td class="td1"><label for="lname">Last Name:</label></td>
-                    <td><input type="text" name="lname" id="lname" maxlength="30" required
+                    <td class="td1"><label for="lastname">Last Name:</label></td>
+                    <td><input type="text" name="lastname" id="lastname" maxlength="30" required
                            pattern="[a-zA-Z'\-2-5]{1,30}"
                            title="Letters, apostrophes, numbers 2–5, and dashes only. Max 30 characters.">
                     </td>
@@ -266,23 +266,23 @@ Description: patient registration form
 
                 <!-- USER ID & PASSWORD -->
                 <tr>
-                    <td class="td1"><label for="uid">User ID:</label></td>
-                    <td><input type="text" name="uid" id="uid" maxlength="30" pattern="^[A-Za-z][A-Za-z0-9_-]{4,29}$"
+                    <td class="td1"><label for="userid">User ID:</label></td>
+                    <td><input type="text" name="userid" id="userid" maxlength="30" pattern="^[A-Za-z][A-Za-z0-9_-]{4,29}$"
                         title="5-30 characters. Must start with a letter. Letters, digits, underscore or dash only." required>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="td1"><label for="pword">Password:</label></td>
-                    <td><input type="password" name="pword" id="pword" minlength="8" maxlength="30"
+                    <td class="td1"><label for="password">Password:</label></td>
+                    <td><input type="password" name="password" id="password" minlength="8" maxlength="30"
                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s\"])[^\"]+$"
                     title="8–30 characters. Must include uppercase, lowercase, digit, and a special character. No quotes." required>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="td1"><label for="pword2">Re-enter Password:</label></td>
-                    <td><input type="password" name="pword2" id="pword2" minlength="8" maxlength="30"
+                    <td class="td1"><label for="confirmpassword">Re-enter Password:</label></td>
+                    <td><input type="password" name="confirmpassword" id="confirmpassword" minlength="8" maxlength="30"
                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s\"])[^\"]+$"
                     title="8–30 characters. Must include uppercase, lowercase, digit, and a special character. No quotes." required>
                     </td>
