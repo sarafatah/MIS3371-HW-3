@@ -10,14 +10,17 @@ document.addEventListener("DOMContentLoaded", function () {
     function getValue(id) {
         return document.getElementById(id)?.value || "";
     }
+    
     function getCheckedValues(name) {
         return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
             .map(cb => cb.value).join(", ");
     }
+    
     function getSelectedRadio(name) {
         const selected = document.querySelector(`input[name="${name}"]:checked`);
         return selected ? selected.value : "Not selected";
     }
+    
     function formatCurrency(value) {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -27,16 +30,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Elements
-    const form = document.getElementById("userInfo") || document.getElementById("registrationForm");
+    const form = document.getElementById("registrationForm");
     const reviewBtn = document.getElementById("reviewButton");
-    const modal = document.getElementById("reviewModal") || document.getElementById("confirmationModal");
-    const reviewContent = document.getElementById("reviewContent") || document.getElementById("modalContent");
+    const modal = document.getElementById("reviewModal");
+    const reviewContent = document.getElementById("reviewContent");
 
     /* ========== Input Validations ========== */
 
     // First Name
     const firstnameInput = document.getElementById("firstname");
-    const firstnameError = document.getElementById("errorFirstname");
+    const firstnameError = document.getElementById("firstnameError");
     if (firstnameInput && firstnameError) {
         firstnameInput.addEventListener("input", function () {
             const validPattern = /^[a-zA-Z'-]+$/;
@@ -51,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Middle Initial
     const midInitialInput = document.getElementById("midinitial");
-    const midInitialError = document.getElementById("midinitial-error");
+    const midInitialError = document.getElementById("midinitialError");
     if (midInitialInput && midInitialError) {
         midInitialInput.addEventListener("input", function () {
             const validPattern = /^[a-zA-Z]?$/;
@@ -66,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Last Name
     const lastNameInput = document.getElementById("lastname");
-    const lastNameError = document.getElementById("errorLastname");
+    const lastNameError = document.getElementById("lastnameError");
     if (lastNameInput && lastNameError) {
         lastNameInput.addEventListener("input", function () {
             const validPattern = /^[a-zA-Z'-]*[2-5]?[a-zA-Z'-]*$/;
@@ -92,17 +95,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // DOB
     const dobInput = document.getElementById("dob");
-    const dobError = document.getElementById("errorDob");
+    const dobError = document.getElementById("dobError");
     if (dobInput && dobError) {
         dobInput.addEventListener("change", function () {
             const inputDate = new Date(dobInput.value);
             const today = new Date();
             const minDate = new Date();
             minDate.setFullYear(today.getFullYear() - 120);
+            
             if (dobInput.value === "") {
                 dobError.textContent = "";
                 return;
             }
+            
             if (inputDate > today) {
                 dobError.textContent = "Birthdate cannot be in the future.";
                 dobInput.value = "";
@@ -117,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // SSN
     const ssnInput = document.getElementById("ssn");
-    const ssnError = document.getElementById("errorSsn");
+    const ssnError = document.getElementById("ssnError");
     let originalSSN = "";
     if (ssnInput && ssnError) {
         ssnInput.addEventListener("input", function () {
@@ -130,11 +135,13 @@ document.addEventListener("DOMContentLoaded", function () {
             const validPattern = /^\d{3}-\d{2}-\d{4}$/;
             ssnError.textContent = (inputValue.length === 11 && !validPattern.test(inputValue)) ? "Invalid SSN format. Use XXX-XX-XXXX." : "";
         });
+        
         ssnInput.addEventListener("blur", function () {
             if (originalSSN.length === 11) {
                 ssnInput.value = "•••-••-" + originalSSN.slice(-4);
             }
         });
+        
         ssnInput.addEventListener("focus", function () {
             if (originalSSN.length === 11) {
                 ssnInput.value = originalSSN;
@@ -142,83 +149,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // State Dropdown
-    const stateSelect = document.getElementById("state");
-    const stateError = document.getElementById("errorState");
-    if (stateSelect && stateError) {
-        // Populate states dropdown once
-                      const states = [
-                { code: "AL", name: "Alabama" },
-                { code: "AK", name: "Alaska" },
-                { code: "AZ", name: "Arizona" },
-                { code: "AR", name: "Arkansas" },
-                { code: "CA", name: "California" },
-                { code: "CO", name: "Colorado" },
-                { code: "CT", name: "Connecticut" },
-                { code: "DE", name: "Delaware" },
-                { code: "FL", name: "Florida" },
-                { code: "GA", name: "Georgia" },
-                { code: "HI", name: "Hawaii" },
-                { code: "ID", name: "Idaho" },
-                { code: "IL", name: "Illinois" },
-                { code: "IN", name: "Indiana" },
-                { code: "IA", name: "Iowa" },
-                { code: "KS", name: "Kansas" },
-                { code: "KY", name: "Kentucky" },
-                { code: "LA", name: "Louisiana" },
-                { code: "ME", name: "Maine" },
-                { code: "MD", name: "Maryland" },
-                { code: "MA", name: "Massachusetts" },
-                { code: "MI", name: "Michigan" },
-                { code: "MN", name: "Minnesota" },
-                { code: "MS", name: "Mississippi" },
-                { code: "MO", name: "Missouri" },
-                { code: "MT", name: "Montana" },
-                { code: "NE", name: "Nebraska" },
-                { code: "NV", name: "Nevada" },
-                { code: "NH", name: "New Hampshire" },
-                { code: "NJ", name: "New Jersey" },
-                { code: "NM", name: "New Mexico" },
-                { code: "NY", name: "New York" },
-                { code: "NC", name: "North Carolina" },
-                { code: "ND", name: "North Dakota" },
-                { code: "OH", name: "Ohio" },
-                { code: "OK", name: "Oklahoma" },
-                { code: "OR", name: "Oregon" },
-                { code: "PA", name: "Pennsylvania" },
-                { code: "RI", name: "Rhode Island" },
-                { code: "SC", name: "South Carolina" },
-                { code: "SD", name: "South Dakota" },
-                { code: "TN", name: "Tennessee" },
-                { code: "TX", name: "Texas" },
-                { code: "UT", name: "Utah" },
-                { code: "VT", name: "Vermont" },
-                { code: "VA", name: "Virginia" },
-                { code: "WA", name: "Washington" },
-                { code: "WV", name: "West Virginia" },
-                { code: "WI", name: "Wisconsin" },
-                { code: "WY", name: "Wyoming" },
-                { code: "DC", name: "District of Columbia" },
-                { code: "PR", name: "Puerto Rico" }
-              ];
-
-        // Populate once
-        if (stateSelect.options.length === 0) {
-            states.forEach(s => {
-                const option = document.createElement("option");
-                option.value = s.code;
-                option.textContent = s.name;
-                stateSelect.appendChild(option);
-            });
-        }
-        stateSelect.addEventListener("change", function () {
-            stateError.textContent = stateSelect.value === "" ? "Please select a valid state." : "";
-        });
-    }
-
     // ZIP Code
     const zipInput = document.getElementById("zip");
-    const zipError = document.getElementById("errorZip");
+    const zipError = document.getElementById("zipError");
     if (zipInput && zipError) {
         zipInput.addEventListener("input", function () {
             let inputValue = zipInput.value.replace(/[^0-9-]/g, '');
@@ -235,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // User ID
     const userIdInput = document.getElementById("userid");
-    const userIdError = document.getElementById("errorUserid");
+    const userIdError = document.getElementById("useridError");
     if (userIdInput && userIdError) {
         userIdInput.addEventListener("input", function () {
             let inputValue = userIdInput.value.replace(/[^a-zA-Z0-9_-]/g, '');
@@ -248,6 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
             inputValue = inputValue.replace(/\s/g, '').slice(0, 30);
             userIdInput.value = inputValue;
         });
+        
         form.addEventListener("submit", function (event) {
             userIdInput.value = userIdInput.value.toLowerCase();
             if (userIdInput.value.length < 5) {
@@ -259,39 +193,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Password & Confirm Password
     const passwordInput = document.getElementById("password");
-    const confirmPasswordInput = document.getElementById("confirmPassword");
-    const errorPassword = document.getElementById("errorPassword");
-    const errorConfirmPassword = document.getElementById("errorConfirmPassword");
+    const confirmPasswordInput = document.getElementById("confirmpassword");
+    const passwordError = document.getElementById("passwordError");
+    const confirmPasswordError = document.getElementById("confirmpasswordError");
 
     function validatePassword() {
         const password = passwordInput.value;
         const userId = userIdInput.value.toLowerCase();
         let errorMessage = "";
 
-        if (password.length < 8 || password.length > 30) errorMessage = "Password must be between 8 and 30 characters long.";
-        else if (!/[A-Z]/.test(password)) errorMessage = "Password must contain at least one uppercase letter.";
-        else if (!/[a-z]/.test(password)) errorMessage = "Password must contain at least one lowercase letter.";
-        else if (!/[0-9]/.test(password)) errorMessage = "Password must contain at least one number.";
-        else if (!/[!@#%^&*()\-_+=\/><.,~]/.test(password)) errorMessage = "Password must contain at least one special character.";
-        else if (/['"]/.test(password)) errorMessage = "Password cannot contain quotes.";
-        else if (userId && password.toLowerCase().includes(userId)) errorMessage = "Password cannot contain or be the same as your User ID.";
+        if (password.length < 8 || password.length > 30) {
+            errorMessage = "Password must be between 8 and 30 characters long.";
+        } else if (!/[A-Z]/.test(password)) {
+            errorMessage = "Password must contain at least one uppercase letter.";
+        } else if (!/[a-z]/.test(password)) {
+            errorMessage = "Password must contain at least one lowercase letter.";
+        } else if (!/[0-9]/.test(password)) {
+            errorMessage = "Password must contain at least one number.";
+        } else if (!/[!@#%^&*()\-_+=\/><.,~]/.test(password)) {
+            errorMessage = "Password must contain at least one special character.";
+        } else if (/['"]/.test(password)) {
+            errorMessage = "Password cannot contain quotes.";
+        } else if (userId && password.toLowerCase().includes(userId)) {
+            errorMessage = "Password cannot contain your User ID.";
+        }
 
-        errorPassword.textContent = errorMessage;
+        passwordError.textContent = errorMessage;
         return errorMessage === "";
     }
 
     function validateConfirmPassword() {
+        if (!passwordInput.value || !confirmPasswordInput.value) {
+            confirmPasswordError.textContent = "";
+            return true;
+        }
+        
         const valid = confirmPasswordInput.value === passwordInput.value;
-        errorConfirmPassword.textContent = valid ? "" : "Passwords do not match.";
+        confirmPasswordError.textContent = valid ? "" : "Passwords do not match.";
         return valid;
     }
 
-    if (passwordInput && confirmPasswordInput && errorPassword && errorConfirmPassword) {
-        passwordInput.addEventListener("input", validatePassword);
+    if (passwordInput && confirmPasswordInput && passwordError && confirmPasswordError) {
+        passwordInput.addEventListener("input", function() {
+            validatePassword();
+            validateConfirmPassword(); // Also check match when password changes
+        });
+        
         confirmPasswordInput.addEventListener("input", validateConfirmPassword);
+        
         form.addEventListener("submit", function (event) {
             if (!validatePassword() || !validateConfirmPassword()) {
-                alert("Please correct the password errors before submitting.");
                 event.preventDefault();
             }
         });
@@ -299,41 +250,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Salary Slider and Label
     const salarySlider = document.getElementById("salary");
-    if (salarySlider) {
-        const salaryLabel = document.getElementById("salaryLabel");
+    const salaryLabel = document.getElementById("salaryLabel");
+    if (salarySlider && salaryLabel) {
         salarySlider.addEventListener("input", () => {
-            if (salaryLabel) salaryLabel.textContent = formatCurrency(salarySlider.value);
+            salaryLabel.textContent = formatCurrency(salarySlider.value);
         });
     }
 
     // Home Budget Sliders and Labels
     const minPriceSlider = document.getElementById("minPrice");
     const maxPriceSlider = document.getElementById("maxPrice");
-    if (minPriceSlider && maxPriceSlider) {
-        const minPriceLabel = document.getElementById("minPriceLabel");
-        const maxPriceLabel = document.getElementById("maxPriceLabel");
+    const minPriceLabel = document.getElementById("minPriceLabel");
+    const maxPriceLabel = document.getElementById("maxPriceLabel");
 
+    if (minPriceSlider && maxPriceSlider && minPriceLabel && maxPriceLabel) {
         minPriceSlider.addEventListener("input", () => {
-            if (minPriceLabel) minPriceLabel.textContent = formatCurrency(minPriceSlider.value);
+            minPriceLabel.textContent = formatCurrency(minPriceSlider.value);
         });
+        
         maxPriceSlider.addEventListener("input", () => {
-            if (maxPriceLabel) maxPriceLabel.textContent = formatCurrency(maxPriceSlider.value);
+            maxPriceLabel.textContent = formatCurrency(maxPriceSlider.value);
         });
     }
 
     /* ========== Review Button Click (Show Modal with Summary) ========== */
     if (reviewBtn && modal && reviewContent) {
         reviewBtn.addEventListener("click", function () {
-            let uid = getValue("userid").toLowerCase();
-            document.getElementById("userid").value = uid;
-
-            let password = getValue("password");
-            let confirmPassword = getValue("confirmPassword");
-
+            // Validate passwords first
+            const password = getValue("password");
+            const confirmPassword = getValue("confirmpassword");
+            
             if (password !== confirmPassword) {
                 alert("❌ Passwords do not match.");
                 return;
             }
+            
+            const uid = getValue("userid").toLowerCase();
             if (password.toLowerCase().includes(uid)) {
                 alert("❌ Password cannot contain the User ID.");
                 return;
@@ -346,22 +298,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            // Validate DOB
             const dobInputVal = getValue("dob");
-            const dob = new Date(dobInputVal);
-            const today = new Date();
-            const maxDOB = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
-            if (dob > today || dob < maxDOB) {
-                alert("❌ Date of Birth must be within the past 120 years.");
-                return;
+            if (dobInputVal) {
+                const dob = new Date(dobInputVal);
+                const today = new Date();
+                const maxDOB = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
+                if (dob > today || dob < maxDOB) {
+                    alert("❌ Date of Birth must be within the past 120 years.");
+                    return;
+                }
             }
 
+            // Create review content
             let zip = getValue("zip");
             zip = zip.includes("-") ? zip.split("-")[0] : zip;
             const phone = getValue("phone");
 
             const content = `
                 <strong>First, MI, Last Name:</strong> ${getValue("firstname")} ${getValue("midinitial")} ${getValue("lastname")}<br>
-                <strong>Date of Birth:</strong> ${dobInputVal}<br>
+                <strong>Date of Birth:</strong> ${dobInputVal || "Not provided"}<br>
                 <strong>Email:</strong> ${getValue("email")}<br>
                 <strong>Phone Number:</strong> ${phone}<br><br>
 
@@ -386,34 +342,19 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
 
             reviewContent.innerHTML = content;
-
-            // Show modal (assuming a Bootstrap modal or similar)
-            if (typeof bootstrap !== "undefined") {
-                const bsModal = new bootstrap.Modal(modal);
-                bsModal.show();
-            } else {
-                modal.style.display = "block";
-            }
+            modal.style.display = "block";
         });
     }
- 
+
+    // Confirm Submit function
     function confirmSubmit() {
-    const form = document.getElementById("registrationForm");
-    if (form) form.submit();
-}
+        if (form) form.submit();
+    }
 
-    
-    /* Modal Close Handling */
-    const modalCloseButtons = modal ? modal.querySelectorAll(".close, .btn-close, .close-modal") : [];
-    modalCloseButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-            if (typeof bootstrap !== "undefined") {
-                const bsModal = bootstrap.Modal.getInstance(modal);
-                if (bsModal) bsModal.hide();
-            } else {
-                modal.style.display = "none";
-            }
-        });
+    // Close modal when clicking outside
+    window.addEventListener("click", function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
     });
-
 });
