@@ -435,6 +435,22 @@ document.getElementById('dob').addEventListener('change', function() {
         if (event.target === modal) {
             modal.style.display = "none";
 
+    document.getElementById('reviewButton').addEventListener('click', function() {
+    if (!isFormValid()) {
+        alert("Please fix all errors before reviewing");
+        return;
+    }
+    
+    // Generate review content
+    const content = `
+        <h4>Please Review Your Information</h4>
+        <p><strong>Name:</strong> ${document.getElementById('firstname').value} ${document.getElementById('lastname').value}</p>
+        <!-- Add all other fields -->
+    `;
+    
+    document.getElementById('reviewContent').innerHTML = content;
+    document.getElementById('reviewModal').style.display = 'block';
+});
 
     // Final Form Validation
 function isFormValid() {
