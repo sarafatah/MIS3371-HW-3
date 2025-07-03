@@ -1,7 +1,6 @@
 /*
  Name: Sara Fatah
  Date Created: 06/18/25
- Date Updated: 07/01/25
  Date Updated: 07/02/25
  Purpose: Validate form fields, display review modal, and handle form submission
 */
@@ -45,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
         firstnameInput.addEventListener("input", function () {
             const validPattern = /^[a-zA-Z'-]+$/;
             if (firstnameInput.value !== "" && !validPattern.test(firstnameInput.value)) {
+                firstnameError.textContent = "Only letters, apostrophes, and dashes are allowed!";
                 firstnameError.textContent = "Only letters, apostrophes and dashes allowed!";
                 firstnameInput.value = firstnameInput.value.replace(/[^a-zA-Z'-]/g, '');
             } else {
@@ -121,63 +121,40 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-      // SSN Variables
-   let originalSSN = "";
+    // SSN
+    const ssnInput = document.getElementById("ssn");
+    const ssnError = document.getElementById("ssnError");
+    let originalSSN = "";
+    if (ssnInput && ssnError) {
+        ssnInput.addEventListener("input", function () {
+            let inputValue = ssnInput.value.replace(/[^0-9-]/g, '');
+            if (inputValue.length > 3 && inputValue.charAt(3) !== '-') inputValue = inputValue.slice(0, 3) + '-' + inputValue.slice(3);
+            if (inputValue.length > 6 && inputValue.charAt(6) !== '-') inputValue = inputValue.slice(0, 6) + '-' + inputValue.slice(6);
+            inputValue = inputValue.slice(0, 11);
+            ssnInput.value = inputValue;
+            originalSSN = inputValue;
+            const validPattern = /^\d{3}-\d{2}-\d{4}$/;
+            ssnError.textContent = (inputValue.length === 11 && !validPattern.test(inputValue)) ? "Invalid SSN format. Use XXX-XX-XXXX." : "";
+        });
 
-   // Auto-formatting
-   document.getElementById('ssn').addEventListener('input', function(e) {
-       // Remove non-digits
-       let val = e.target.value.replace(/\D/g, '');
+        ssnInput.addEventListener("blur", function () {
+            if (originalSSN.length === 11) {
+                ssnInput.value = "•••-••-" + originalSSN.slice(-4);
+            }
+        });
 
-       // Auto-insert dashes
-       if (val.length > 3) val = val.slice(0,3) + '-' + val.slice(3);
-       if (val.length > 6) val = val.slice(0,6) + '-' + val.slice(6);
-
-       // Limit to 11 chars (XXX-XX-XXXX)
-       e.target.value = val.slice(0,11);
-       originalSSN = val.slice(0,11);
-   });
-
-   // Mask on blur
-   document.getElementById('ssn').addEventListener('blur', function() {
-       if (originalSSN.length === 11) {
-           this.classList.add('masked');
-           this.value = "•••-••-" + originalSSN.slice(-4);
-       }
-   });
-
-   // Unmask on focus
-   document.getElementById('ssn').addEventListener('focus', function() {
-       this.classList.remove('masked');
-       if (originalSSN.length === 11) {
-           this.value = originalSSN;
-       }
-   });
-
-   // Validation
-   function validateSSN() {
-       const ssn = document.getElementById('ssn');
-       const error = document.getElementById('ssnError');
-       const val = originalSSN.replace(/-/g, '');
-
-       if (val.length !== 9) {
-           error.textContent = "Complete 9-digit SSN";
-           return false;
-       }
-
-       // Advanced validation (no 000-xx-xxxx, etc.)
-       const invalidPrefixes = ["000", "666", "9"];
-       const prefix = val.slice(0,3);
-
-       if (invalidPrefixes.includes(prefix) || 
-           val.match(/^0{3}-?0{2}-?0{4}$/)) {
-           error.textContent = "Invalid SSN number";
-           return false;
-       }
-
-       error.textContent = "";
-       return true;
-   }
+        ssnInput.addEventListener("focus", function () {
+            if (originalSSN.length === 11) {
+                ssnInput.value = originalSSN;
+            }
+        });
+          document.getElementById('ssn').addEventListener('input', function(e) {
+         let val = e.target.value.replace(/\D/g, '');
+         if (val.length > 3) val = val.slice(0,3) + '-' + val.slice(3);
+         if (val.length > 6) val = val.slice(0,6) + '-' + val.slice(6);
+         e.target.value = val.slice(0,11);
+});
+    }
 
     // ZIP Code
     const zipInput = document.getElementById("zip");
@@ -315,19 +292,6 @@ function validatePasswordMatch() {
     errorElement.textContent = "";
     return true;
 }
-
- // Password Strength System
-function updatePasswordStrength() {
-    const password = document.getElementById('password').value;
-    const bar = document.getElementById('password-strength-bar');
-    const text = document.getElementById('password-strength-text');
-    let strength = 0;
-
- // Strength calculation
-    if (password.length >= 8) strength += 25;
-    if (/[A-Z]/.test(password)) strength += 25;
-    if (/[a-z]/.test(password)) strength += 25;
-    if (/[0-9]/.test(password)) strength += 25;
 
 // Event Listeners
 document.getElementById('password').addEventListener('input', function() {
@@ -468,11 +432,6 @@ document.getElementById('dob').addEventListener('change', function() {
         });
     }
 
-    // UI
-    bar.style.width = strength + '%';
-    bar.style.backgroundColor = strength < 50 ? '#d9534f' : strength < 75 ? '#f0ad4e' : '#5cb85c';
-    text.textContent = strength < 50 ? 'Weak' : strength < 75 ? 'Medium' : 'Strong';
-}
     // Confirm Submit function
     function confirmSubmit() {
         if (form) form.submit();
@@ -527,23 +486,6 @@ function isFormValid() {
     document.querySelectorAll('input, select').forEach(el => {
         el.addEventListener('input', checkForm);
 });
-
-    // SSN Masking
-    document.getElementById('ssn').addEventListener('blur', function() {
-    if (this.value.length === 11) {
-        this.classList.add('masked');
-    }
-});
-document.getElementById('ssn').addEventListener('focus', function() {
-    this.classList.remove('masked');
-});
-
-  // Enable/Disable Submit
-document.querySelectorAll('input, select').forEach(el => {
-    el.addEventListener('input', () => {
-        document.getElementById('submitBtn').disabled = !isFormValid();
-    });
-
       function isFormValid() {
     const fields = [
         validateFirstName(),
