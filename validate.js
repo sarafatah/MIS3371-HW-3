@@ -147,6 +147,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 ssnInput.value = originalSSN;
             }
         });
+          document.getElementById('ssn').addEventListener('input', function(e) {
+         let val = e.target.value.replace(/\D/g, '');
+         if (val.length > 3) val = val.slice(0,3) + '-' + val.slice(3);
+         if (val.length > 6) val = val.slice(0,6) + '-' + val.slice(6);
+         e.target.value = val.slice(0,11);
+});
     }
 
     // ZIP Code
