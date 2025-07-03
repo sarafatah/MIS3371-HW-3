@@ -249,30 +249,48 @@ document.addEventListener("DOMContentLoaded", () => {
     return isValid;
   }
 
-  // --- SSN Auto-formatting ---
-  let originalSSN = "";
-  if (document.getElementById("ssn")) {
-    document.getElementById("ssn").addEventListener("input", (e) => {
-      let val = e.target.value.replace(/\D/g, "");
-      if (val.length > 9) val = val.slice(0, 9);
-      if (val.length > 5) val = `${val.slice(0,3)}-${val.slice(3,5)}-${val.slice(5)}`;
-      else if (val.length > 3) val = `${val.slice(0,3)}-${val.slice(3)}`;
-      e.target.value = val;
-      originalSSN = val;
-    });
+ // --- SSN Auto-formatting ---
+let originalSSN = "";
+const ssnInput = document.getElementById("ssn");
 
-    document.getElementById("ssn").addEventListener("blur", () => {
-      if (originalSSN.length === 11) {
-        document.getElementById("ssn").value = "•••-••-" + originalSSN.slice(-4);
-      }
-    });
+if (ssnInput) {
+  ssnInput.addEventListener("input", (e) => {
+    let val = ssnInput.value;
 
-    document.getElementById("ssn").addEventListener("focus", () => {
-      if (originalSSN.length === 11) {
-        document.getElementById("ssn").value = originalSSN;
-      }
-    });
-  }
+    // Allow only digits and dashes
+    val = val.replace(/[^0-9-]/g, "");
+
+    // Remove dashes temporarily for formatting
+    let digitsOnly = val.replace(/-/g, "");
+
+    // Limit to max 9 digits
+    if (digitsOnly.length > 9) digitsOnly = digitsOnly.slice(0, 9);
+
+    // Insert dashes at the right spots
+    if (digitsOnly.length > 5) {
+      val = `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(3, 5)}-${digitsOnly.slice(5)}`;
+    } else if (digitsOnly.length > 3) {
+      val = `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(3)}`;
+    } else {
+      val = digitsOnly;
+    }
+
+    ssnInput.value = val;
+    originalSSN = val;
+  });
+
+  ssnInput.addEventListener("blur", () => {
+    if (originalSSN.length === 11) {
+      ssnInput.value = "•••-••-" + originalSSN.slice(-4);
+    }
+  });
+
+  ssnInput.addEventListener("focus", () => {
+    if (originalSSN.length === 11) {
+      ssnInput.value = originalSSN;
+    }
+  });
+}
 
   // --- Slider Labels ---
   function setupSliderLabel(sliderId, labelId) {
