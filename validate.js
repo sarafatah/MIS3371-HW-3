@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
         firstnameInput.addEventListener("input", function () {
             const validPattern = /^[a-zA-Z'-]+$/;
             if (firstnameInput.value !== "" && !validPattern.test(firstnameInput.value)) {
-                firstnameError.textContent = "Only letters, apostrophes, and dashes are allowed!";
+                firstnameError.textContent = "Only letters, apostrophes and dashes allowed!";
                 firstnameInput.value = firstnameInput.value.replace(/[^a-zA-Z'-]/g, '');
             } else {
                 firstnameError.textContent = "";
