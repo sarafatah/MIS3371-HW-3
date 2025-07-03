@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("reviewModal");
     const reviewContent = document.getElementById("reviewContent");
 
-    /* ========== Input Validations ========== */
+   // Input Validations
 
     // First Name
     const firstnameInput = document.getElementById("firstname");
@@ -434,6 +434,27 @@ document.getElementById('dob').addEventListener('change', function() {
                 alert("Password cannot contain your first or last name.");
                 return;
             }
+
+         //validate button
+            document.addEventListener("DOMContentLoaded", function () {
+    const validateBtn = document.getElementById("validateBtn");
+    const submitBtn = document.getElementById("submitBtn");
+
+    if (validateBtn) {
+        validateBtn.addEventListener("click", function () {
+            // Call your full form validation
+            const isValid = validateForm(); // runs all validations
+
+            if (isValid) {
+                submitBtn.style.display = "inline-block";
+                alert("All fields are valid. You may now submit the form.");
+            } else {
+                submitBtn.style.display = "none";
+                alert("Please correct the errors before submitting.");
+            }
+        });
+    }
+});
 
             // Validate DOB
             const dobInputVal = getValue("dob");
