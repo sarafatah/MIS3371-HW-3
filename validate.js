@@ -84,15 +84,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Email
-    const emailInput = document.getElementById("email");
-    const emailError = document.getElementById("emailError");
-    if (emailInput && emailError) {
-        emailInput.addEventListener("input", function () {
-            const email = emailInput.value.toLowerCase();
-            const validPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            emailError.textContent = validPattern.test(email) ? "" : "Enter a valid email format (name@domain.tld)";
-        });
-    }
+       const emailInput = document.getElementById("email");
+   const emailError = document.getElementById("emailError");
+   
+   if (emailInput && emailError) {
+       emailInput.addEventListener("input", function () {
+           const rawEmail = emailInput.value.trim().toLowerCase();
+           emailInput.value = rawEmail; // force lowercase into input box
+   
+           const validPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+   
+           if (!validPattern.test(rawEmail)) {
+               emailError.textContent = "Enter a valid email (e.g. name@example.com)";
+           } else {
+               emailError.textContent = "";
+           }
+       });
+   }
+
 
     // DOB
     const dobInput = document.getElementById("dob");
