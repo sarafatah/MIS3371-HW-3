@@ -250,47 +250,49 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
  // --- SSN Auto-formatting ---
-let originalSSN = "";
-const ssnInput = document.getElementById("ssn");
+document.addEventListener("DOMContentLoaded", () => {
+  const ssnInput = document.getElementById("ssn");
+  const ssnError = document.getElementById("ssnError");
+  let originalSSN = "";
 
-if (ssnInput) {
-  ssnInput.addEventListener("input", (e) => {
-    let val = ssnInput.value;
+  if (ssnInput && ssnError) {
+    ssnInput.addEventListener("input", () => {
+      // Remove all non-digit characters
+      let digits = ssnInput.value.replace(/\D/g, "");
+      if (digits.length > 9) digits = digits.slice(0, 9);
 
-    // Allow only digits and dashes
-    val = val.replace(/[^0-9-]/g, "");
+      // Format as XXX-XX-XXXX
+      let formattedSSN = "";
+      if (digits.length > 5) {
+        formattedSSN = `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
+      } else if (digits.length > 3) {
+        formattedSSN = `${digits.slice(0, 3)}-${digits.slice(3)}`;
+      } else {
+        formattedSSN = digits;
+      }
 
-    // Remove dashes temporarily for formatting
-    let digitsOnly = val.replace(/-/g, "");
+      ssnInput.value = formattedSSN;
+      originalSSN = formattedSSN;
 
-    // Limit to max 9 digits
-    if (digitsOnly.length > 9) digitsOnly = digitsOnly.slice(0, 9);
+      // Validate pattern only if length is 11 (fully formatted)
+      const validPattern = /^\d{3}-\d{2}-\d{4}$/;
+      if (formattedSSN.length === 11 && !validPattern.test(formattedSSN)) {
+        ssnError.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
+      } else {
+        ssnError.textContent = "";
+      }
+    });
 
-    // Insert dashes at the right spots
-    if (digitsOnly.length > 5) {
-      val = `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(3, 5)}-${digitsOnly.slice(5)}`;
-    } else if (digitsOnly.length > 3) {
-      val = `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(3)}`;
-    } else {
-      val = digitsOnly;
-    }
+    ssnInput.addEventListener("blur", () => {
+      // Mask the first 5 digits when leaving the field
+      if (originalSSN.length === 11) {
+        ssnInput.value = "•••-••-" + originalSSN.slice(-4);
+      }
+    });
 
-    ssnInput.value = val;
-    originalSSN = val;
-  });
+    ssnInput.addEventListener("focus", () => {
+      
 
-  ssnInput.addEventListener("blur", () => {
-    if (originalSSN.length === 11) {
-      ssnInput.value = "•••-••-" + originalSSN.slice(-4);
-    }
-  });
-
-  ssnInput.addEventListener("focus", () => {
-    if (originalSSN.length === 11) {
-      ssnInput.value = originalSSN;
-    }
-  });
-}
 
   // --- Slider Labels ---
   function setupSliderLabel(sliderId, labelId) {
