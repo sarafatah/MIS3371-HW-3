@@ -125,18 +125,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function validateSSN() {
-    const input = document.getElementById("ssn");
-    const error = document.getElementById("ssnError");
-    const val = input.value;
-    const pattern = /^\d{3}-\d{2}-\d{4}$/;
+  const input = document.getElementById("ssn");
+  const error = document.getElementById("ssnError");
+  const val = input.value;
+  const fullPattern = /^\d{3}-\d{2}-\d{4}$/;
+  const maskedPattern = /^•••-••-\d{4}$/;
 
-    if (!pattern.test(val)) {
-      error.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
-      return false;
-    }
-    error.textContent = "";
-    return true;
+  if (!fullPattern.test(val) && !maskedPattern.test(val)) {
+    error.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
+    return false;
   }
+
+  error.textContent = "";
+  return true;
+}
+
 
   function validateZip() {
     const input = document.getElementById("zip");
