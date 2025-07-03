@@ -26,6 +26,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("reviewModal");
   const reviewContent = document.getElementById("reviewContent");
   const submitBtn = document.getElementById("submitBtn");
+  const validateBtn = document.getElementById("validateBtn");
+if (validateBtn) {
+  validateBtn.addEventListener("click", () => {
+    if (isFormValid()) {
+      alert("All fields are valid!");
+      if (submitBtn) {
+        submitBtn.style.display = "inline-block";  // Show Submit button
+        submitBtn.disabled = false;
+      }
+    } else {
+      alert("Please fix errors in the form before submitting.");
+      if (submitBtn) {
+        submitBtn.style.display = "none";  // Hide Submit button
+        submitBtn.disabled = true;
+      }
+    }
+  });
+}
+
+
 
   // --- SSN Auto-formatting and Masking ---
   const ssnInput = document.getElementById("ssn");
