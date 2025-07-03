@@ -109,7 +109,7 @@ p {
     font-size: 0.8em;
     display: block;
     margin-top: 5px;
-    height: 15px; 
+    line-height: 1.2;
 }
 
 #password-strength {
