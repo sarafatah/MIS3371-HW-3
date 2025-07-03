@@ -121,6 +121,38 @@ p {
 .strength-medium { background: #f0ad4e; width: 50%; }
 .strength-strong { background: #5cb85c; width: 100%; }
 
+
+.error-message {
+    color: #d9534f;
+    font-size: 0.8em;
+    display: block;
+    min-height: 1em;
+    margin: 0.25em 0 0.5em 0;
+}
+
+.password-strength {
+    margin: 5px 0;
+}
+#password-strength-bar {
+    height: 5px;
+    background: #ddd;
+    margin-bottom: 3px;
+    transition: all 0.3s;
+}
+#password-strength-text {
+    font-size: 0.8em;
+}
+
+.form-group {
+    margin-bottom: 1.5em;
+    min-height: 5em;
+}
+
+#ssn.masked {
+    color: transparent;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
 input:invalid, textarea:invalid, select:invalid {
     border-color: #d9534f;
 }
