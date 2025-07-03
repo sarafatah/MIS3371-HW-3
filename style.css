@@ -171,3 +171,18 @@ input:valid, textarea:valid, select:valid {
     margin-bottom: 1.5em;
     min-height: 5em;
 }
+
+#password-strength-bar {
+  height: 5px;
+  background: #eee;
+  margin: 5px 0;
+  transition: width 0.3s;
+}
+#password-match-icon {
+  color: #5cb85c;
+  margin-left: 10px;
+  visibility: hidden;
+}
+.valid #password-match-icon {
+  visibility: visible;
+}
