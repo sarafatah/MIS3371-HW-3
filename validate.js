@@ -154,6 +154,27 @@ document.addEventListener("DOMContentLoaded", function () {
          if (val.length > 6) val = val.slice(0,6) + '-' + val.slice(6);
          e.target.value = val.slice(0,11);
 });
+     document.addEventListener("DOMContentLoaded", function () {
+    const ssnInput = document.getElementById("ssn");
+
+    if (ssnInput) {
+        ssnInput.addEventListener("input", function () {
+            let val = ssnInput.value.replace(/\D/g, ""); // Strip non-digits
+            if (val.length > 9) val = val.slice(0, 9);   // Limit to 9 digits
+
+            // Format: XXX-XX-XXXX
+            let formatted = val;
+            if (val.length > 5) {
+                formatted = `${val.slice(0, 3)}-${val.slice(3, 5)}-${val.slice(5)}`;
+            } else if (val.length > 3) {
+                formatted = `${val.slice(0, 3)}-${val.slice(3)}`;
+            }
+
+            ssnInput.value = formatted;
+        });
+    }
+});
+
     }
 
     // ZIP Code
