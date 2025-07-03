@@ -286,50 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return isValid;
   }
 
- //SSN Auto-formatting and Masking 
-const ssnInput = document.getElementById("ssn");
-const ssnError = document.getElementById("ssnError");
-let originalSSN = "";
-
-if (ssnInput && ssnError) {
-  ssnInput.addEventListener("input", () => {
-    let digits = ssnInput.value.replace(/\D/g, "");
-    if (digits.length > 9) digits = digits.slice(0, 9);
-
-    let formatted = digits;
-    if (digits.length > 5) {
-      formatted = `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
-    } else if (digits.length > 3) {
-      formatted = `${digits.slice(0, 3)}-${digits.slice(3)}`;
-    }
-
-    ssnInput.value = formatted;
-    originalSSN = formatted;
-
-    // Show validation error only when full length reached
-    const validPattern = /^\d{3}-\d{2}-\d{4}$/;
-    if (formatted.length === 11 && !validPattern.test(formatted)) {
-      ssnError.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
-    } else {
-      ssnError.textContent = "";
-    }
-  });
-
-  ssnInput.addEventListener("blur", () => {
-    if (originalSSN.length === 11) {
-      ssnInput.value = "•••-••-" + originalSSN.slice(-4);
-    }
-  });
-
-  ssnInput.addEventListener("focus", () => {
-    if (originalSSN.length === 11) {
-      ssnInput.value = originalSSN;
-    }
-  });
-}
-
-
-
   // --- Slider Labels ---
   function setupSliderLabel(sliderId, labelId) {
     const slider = document.getElementById(sliderId);
