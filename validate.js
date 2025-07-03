@@ -1,6 +1,7 @@
-*
+/*
  Name: Sara Fatah
  Date Created: 06/18/25
+ Date Updated: 07/01/25
  Date Updated: 07/02/25
  Purpose: Validate form fields, display review modal, and handle form submission
 */
@@ -10,17 +11,17 @@ document.addEventListener("DOMContentLoaded", function () {
     function getValue(id) {
         return document.getElementById(id)?.value || "";
     }
-    
+
     function getCheckedValues(name) {
         return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
             .map(cb => cb.value).join(", ");
     }
-    
+
     function getSelectedRadio(name) {
         const selected = document.querySelector(`input[name="${name}"]:checked`);
         return selected ? selected.value : "Not selected";
     }
-    
+
     function formatCurrency(value) {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -102,12 +103,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const today = new Date();
             const minDate = new Date();
             minDate.setFullYear(today.getFullYear() - 120);
-            
+
             if (dobInput.value === "") {
                 dobError.textContent = "";
                 return;
             }
-            
+
             if (inputDate > today) {
                 dobError.textContent = "Birthdate cannot be in the future.";
                 dobInput.value = "";
@@ -122,21 +123,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // SSN Variables
    let originalSSN = "";
-   
+
    // Auto-formatting
    document.getElementById('ssn').addEventListener('input', function(e) {
        // Remove non-digits
        let val = e.target.value.replace(/\D/g, '');
-       
+
        // Auto-insert dashes
        if (val.length > 3) val = val.slice(0,3) + '-' + val.slice(3);
        if (val.length > 6) val = val.slice(0,6) + '-' + val.slice(6);
-       
+
        // Limit to 11 chars (XXX-XX-XXXX)
        e.target.value = val.slice(0,11);
        originalSSN = val.slice(0,11);
    });
-   
+
    // Mask on blur
    document.getElementById('ssn').addEventListener('blur', function() {
        if (originalSSN.length === 11) {
@@ -144,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
            this.value = "•••-••-" + originalSSN.slice(-4);
        }
    });
-   
+
    // Unmask on focus
    document.getElementById('ssn').addEventListener('focus', function() {
        this.classList.remove('masked');
@@ -152,28 +153,28 @@ document.addEventListener("DOMContentLoaded", function () {
            this.value = originalSSN;
        }
    });
-   
+
    // Validation
    function validateSSN() {
        const ssn = document.getElementById('ssn');
        const error = document.getElementById('ssnError');
        const val = originalSSN.replace(/-/g, '');
-   
+
        if (val.length !== 9) {
            error.textContent = "Complete 9-digit SSN";
            return false;
        }
-       
+
        // Advanced validation (no 000-xx-xxxx, etc.)
        const invalidPrefixes = ["000", "666", "9"];
        const prefix = val.slice(0,3);
-       
+
        if (invalidPrefixes.includes(prefix) || 
            val.match(/^0{3}-?0{2}-?0{4}$/)) {
            error.textContent = "Invalid SSN number";
            return false;
        }
-       
+
        error.textContent = "";
        return true;
    }
@@ -210,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
             inputValue = inputValue.replace(/\s/g, '').slice(0, 30);
             userIdInput.value = inputValue;
         });
-        
+
         form.addEventListener("submit", function (event) {
             userIdInput.value = userIdInput.value.toLowerCase();
             if (userIdInput.value.length < 5) {
@@ -256,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
             confirmPasswordError.textContent = "";
             return true;
         }
-        
+
         const valid = confirmPasswordInput.value === passwordInput.value;
         confirmPasswordError.textContent = valid ? "" : "Passwords do not match.";
         return valid;
@@ -267,9 +268,9 @@ document.addEventListener("DOMContentLoaded", function () {
             validatePassword();
             validateConfirmPassword(); // Also check match when password changes
         });
-        
+
         confirmPasswordInput.addEventListener("input", validateConfirmPassword);
-        
+
         form.addEventListener("submit", function (event) {
             if (!validatePassword() || !validateConfirmPassword()) {
                 event.preventDefault();
@@ -277,20 +278,20 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
- 
+
  // Password Validation
 function validatePassword() {
     const password = document.getElementById('password').value;
     const username = document.getElementById('userid').value.toLowerCase();
     const errorElement = document.getElementById('passwordError');
-    
+
     let errors = [];
     if (password.length < 8) errors.push("Minimum 8 characters");
     if (!/[A-Z]/.test(password)) errors.push("1 uppercase letter");
     if (!/[a-z]/.test(password)) errors.push("1 lowercase letter");
     if (!/[0-9]/.test(password)) errors.push("1 number");
     if (password.includes(username)) errors.push("Cannot contain username");
-    
+
     errorElement.textContent = errors.join(", ");
     return errors.length === 0;
 }
@@ -300,17 +301,17 @@ function validatePasswordMatch() {
     const password = document.getElementById('password').value;
     const confirm = document.getElementById('confirmpassword').value;
     const errorElement = document.getElementById('confirmpasswordError');
-    
+
     if (!password || !confirm) {
         errorElement.textContent = "";
         return true;
     }
-    
+
     if (password !== confirm) {
         errorElement.textContent = "Passwords do not match";
         return false;
     }
-    
+
     errorElement.textContent = "";
     return true;
 }
@@ -366,7 +367,7 @@ document.getElementById('dob').addEventListener('change', function() {
     const minDate = new Date();
     minDate.setFullYear(today.getFullYear() - 120);
     const errorElement = document.getElementById('dobError');
-    
+
     if (dob > today) {
         errorElement.textContent = "Cannot be future date";
         this.value = "";
@@ -377,7 +378,7 @@ document.getElementById('dob').addEventListener('change', function() {
         errorElement.textContent = "";
     }
 });
- 
+
     // Home Budget Sliders and Labels
     const minPriceSlider = document.getElementById("minPrice");
     const maxPriceSlider = document.getElementById("maxPrice");
@@ -388,7 +389,7 @@ document.getElementById('dob').addEventListener('change', function() {
         minPriceSlider.addEventListener("input", () => {
             minPriceLabel.textContent = formatCurrency(minPriceSlider.value);
         });
-        
+
         maxPriceSlider.addEventListener("input", () => {
             maxPriceLabel.textContent = formatCurrency(maxPriceSlider.value);
         });
@@ -400,12 +401,12 @@ document.getElementById('dob').addEventListener('change', function() {
             // Validate passwords first
             const password = getValue("password");
             const confirmPassword = getValue("confirmpassword");
-            
+
             if (password !== confirmPassword) {
                 alert("Passwords do not match.");
                 return;
             }
-            
+
             const uid = getValue("userid").toLowerCase();
             if (password.toLowerCase().includes(uid)) {
                 alert("Password cannot contain the User ID.");
@@ -466,7 +467,7 @@ document.getElementById('dob').addEventListener('change', function() {
             modal.style.display = "block";
         });
     }
- 
+
     // UI
     bar.style.width = strength + '%';
     bar.style.backgroundColor = strength < 50 ? '#d9534f' : strength < 75 ? '#f0ad4e' : '#5cb85c';
@@ -487,14 +488,14 @@ document.getElementById('dob').addEventListener('change', function() {
         alert("Please fix all errors before reviewing");
         return;
     }
-    
+
     // Generate review content
     const content = `
         <h4>Please Review Your Information</h4>
         <p><strong>Name:</strong> ${document.getElementById('firstname').value} ${document.getElementById('lastname').value}</p>
         <!-- Add all other fields -->
     `;
-    
+
     document.getElementById('reviewContent').innerHTML = content;
     document.getElementById('reviewModal').style.display = 'block';
 });
@@ -516,12 +517,12 @@ function isFormValid() {
     submitBtn.id = 'submitBtn';
     submitBtn.disabled = true;
     document.querySelector('form').appendChild(submitBtn);
-    
+
     // Enable/Disable Submit Button
     function checkForm() {
         document.getElementById('submitBtn').disabled = !isFormValid();
     }
-    
+
     // Check form 
     document.querySelectorAll('input, select').forEach(el => {
         el.addEventListener('input', checkForm);
@@ -542,7 +543,7 @@ document.querySelectorAll('input, select').forEach(el => {
     el.addEventListener('input', () => {
         document.getElementById('submitBtn').disabled = !isFormValid();
     });
- 
+
       function isFormValid() {
     const fields = [
         validateFirstName(),
