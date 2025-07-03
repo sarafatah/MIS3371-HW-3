@@ -499,6 +499,12 @@ function isFormValid() {
     ];
     return fields.every(valid => valid === true);
 }   
+         document.getElementById('ssn').addEventListener('blur', function() {
+  if (this.value.length === 11) {
+    this.type = 'text';
+    this.value = '•••-••-' + originalSSN.slice(-4);
+  }
+});
         }
     });
 });
