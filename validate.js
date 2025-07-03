@@ -481,10 +481,23 @@ function isFormValid() {
         document.getElementById('submitBtn').disabled = !isFormValid();
     }
     
-    // Check form on any input change
+    // Check form 
     document.querySelectorAll('input, select').forEach(el => {
         el.addEventListener('input', checkForm);
 });
+      function isFormValid() {
+    const fields = [
+        validateFirstName(),
+        validateLastName(),
+        validatePassword(),
+        validatePasswordMatch(),
+        validateEmail(),
+        validateSSN(),
+        validateDOB()
+        // Add all other validations
+    ];
+    return fields.every(valid => valid === true);
+}   
         }
     });
 });
