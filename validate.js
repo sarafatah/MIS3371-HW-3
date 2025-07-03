@@ -292,6 +292,19 @@ function validatePasswordMatch() {
     return true;
 }
 
+ // Password Strength System
+function updatePasswordStrength() {
+    const password = document.getElementById('password').value;
+    const bar = document.getElementById('password-strength-bar');
+    const text = document.getElementById('password-strength-text');
+    let strength = 0;
+
+ // Strength calculation
+    if (password.length >= 8) strength += 25;
+    if (/[A-Z]/.test(password)) strength += 25;
+    if (/[a-z]/.test(password)) strength += 25;
+    if (/[0-9]/.test(password)) strength += 25;
+
 // Event Listeners
 document.getElementById('password').addEventListener('input', function() {
     validatePassword();
@@ -430,7 +443,12 @@ document.getElementById('dob').addEventListener('change', function() {
             modal.style.display = "block";
         });
     }
-
+ 
+    // UI
+    bar.style.width = strength + '%';
+    bar.style.backgroundColor = strength < 50 ? '#d9534f' : strength < 75 ? '#f0ad4e' : '#5cb85c';
+    text.textContent = strength < 50 ? 'Weak' : strength < 75 ? 'Medium' : 'Strong';
+}
     // Confirm Submit function
     function confirmSubmit() {
         if (form) form.submit();
@@ -485,6 +503,23 @@ function isFormValid() {
     document.querySelectorAll('input, select').forEach(el => {
         el.addEventListener('input', checkForm);
 });
+
+    // SSN Masking
+    document.getElementById('ssn').addEventListener('blur', function() {
+    if (this.value.length === 11) {
+        this.classList.add('masked');
+    }
+});
+document.getElementById('ssn').addEventListener('focus', function() {
+    this.classList.remove('masked');
+});
+
+  // Enable/Disable Submit
+document.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', () => {
+        document.getElementById('submitBtn').disabled = !isFormValid();
+    });
+ 
       function isFormValid() {
     const fields = [
         validateFirstName(),
