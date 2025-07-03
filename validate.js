@@ -8,7 +8,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   // --- Helper Functions ---
   const getValue = (id) => document.getElementById(id)?.value.trim() || "";
-  const getCheckedValues = (name) => 
+  const getCheckedValues = (name) =>
     Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
       .map(cb => cb.value).join(", ");
   const getSelectedRadio = (name) => {
@@ -21,15 +21,54 @@ document.addEventListener("DOMContentLoaded", () => {
     maximumFractionDigits: 0
   }).format(value);
 
-  // --- Elements ---
   const form = document.getElementById("registrationForm");
   const reviewBtn = document.getElementById("reviewButton");
   const modal = document.getElementById("reviewModal");
   const reviewContent = document.getElementById("reviewContent");
   const submitBtn = document.getElementById("submitBtn");
 
-  // --- Validation Functions ---
+  // --- SSN Auto-formatting and Masking ---
+  const ssnInput = document.getElementById("ssn");
+  const ssnError = document.getElementById("ssnError");
+  let originalSSN = "";
 
+  if (ssnInput && ssnError) {
+    ssnInput.addEventListener("input", () => {
+      let digits = ssnInput.value.replace(/\D/g, "");
+      if (digits.length > 9) digits = digits.slice(0, 9);
+
+      let formatted = digits;
+      if (digits.length > 5) {
+        formatted = `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
+      } else if (digits.length > 3) {
+        formatted = `${digits.slice(0, 3)}-${digits.slice(3)}`;
+      }
+
+      ssnInput.value = formatted;
+      originalSSN = formatted;
+
+      const validPattern = /^\d{3}-\d{2}-\d{4}$/;
+      if (formatted.length === 11 && !validPattern.test(formatted)) {
+        ssnError.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
+      } else {
+        ssnError.textContent = "";
+      }
+    });
+
+    ssnInput.addEventListener("blur", () => {
+      if (originalSSN.length === 11) {
+        ssnInput.value = "•••-••-" + originalSSN.slice(-4);
+      }
+    });
+
+    ssnInput.addEventListener("focus", () => {
+      if (originalSSN.length === 11) {
+        ssnInput.value = originalSSN;
+      }
+    });
+  }
+
+  // --- Validation Functions ---
   function validateFirstName() {
     const input = document.getElementById("firstname");
     const error = document.getElementById("firstnameError");
@@ -125,21 +164,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function validateSSN() {
-  const input = document.getElementById("ssn");
-  const error = document.getElementById("ssnError");
-  const val = input.value;
-  const fullPattern = /^\d{3}-\d{2}-\d{4}$/;
-  const maskedPattern = /^•••-••-\d{4}$/;
+    const input = document.getElementById("ssn");
+    const error = document.getElementById("ssnError");
+    const val = input.value;
+    const pattern = /^\d{3}-\d{2}-\d{4}$/;
 
-  if (!fullPattern.test(val) && !maskedPattern.test(val)) {
-    error.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
-    return false;
+    if (!pattern.test(val)) {
+      error.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
+      return false;
+    }
+    error.textContent = "";
+    return true;
   }
-
-  error.textContent = "";
-  return true;
-}
-
 
   function validateZip() {
     const input = document.getElementById("zip");
@@ -161,10 +197,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function validateUserID() {
     const input = document.getElementById("userid");
     const error = document.getElementById("useridError");
-    let val = input.value;
+    const val = input.value;
+
     if (/^\d/.test(val)) {
       error.textContent = "User ID cannot start with a number.";
-      input.value = val.replace(/^\d/, '');
       return false;
     }
     if (val.length < 5) {
@@ -227,13 +263,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function validateAddress() {
-    let isValid = true;
-
     const address1 = document.getElementById("address1").value.trim();
     const address2 = document.getElementById("address2").value.trim();
-
     const error1 = document.getElementById("errorAddress1");
     const error2 = document.getElementById("errorAddress2");
+    let isValid = true;
 
     if (address1.length < 2 || address1.length > 30) {
       error1.textContent = "Address Line 1 must be between 2 and 30 characters.";
