@@ -112,6 +112,15 @@ p {
     height: 15px; 
 }
 
+#password-strength {
+    height: 5px;
+    margin-top: 5px;
+    transition: width 0.3s;
+}
+.strength-weak { background: #d9534f; width: 25%; }
+.strength-medium { background: #f0ad4e; width: 50%; }
+.strength-strong { background: #5cb85c; width: 100%; }
+
 input:invalid, textarea:invalid, select:invalid {
     border-color: #d9534f;
 }
