@@ -329,6 +329,36 @@ document.getElementById('confirmpassword').addEventListener('input', validatePas
             salaryLabel.textContent = formatCurrency(salarySlider.value);
         });
     }
+function validateAddress() {
+    let isValid = true;
+
+    const address1 = document.getElementById("address1").value.trim();
+    const address2 = document.getElementById("address2").value.trim();
+
+    const error1 = document.getElementById("errorAddress1");
+    const error2 = document.getElementById("errorAddress2");
+
+    // Address Line 1: Required, 2–30 characters
+    if (address1.length < 2 || address1.length > 30) {
+        error1.textContent = "Address Line 1 must be between 2 and 30 characters.";
+        isValid = false;
+    } else {
+        error1.textContent = "";
+    }
+
+    // Address Line 2: Optional, but must be valid if filled
+    if (address2.length > 0 && (address2.length < 2 || address2.length > 30)) {
+        error2.textContent = "Address Line 2 must be between 2 and 30 characters if entered.";
+        isValid = false;
+    } else {
+        error2.textContent = "";
+    }
+
+    return isValid;
+}
+
+
+ 
 // Email Validation
 document.getElementById('email').addEventListener('input', function() {
     const email = this.value.toLowerCase();
@@ -489,6 +519,19 @@ function isFormValid() {
            document.getElementById('email').checkValidity() &&
            document.getElementById('dob').checkValidity();
 }
+      function validateForm() {
+          let isValid = true;
+      
+          // Run address validation
+          isValid &= validateAddress();
+      
+          // Run other validations (example)
+          isValid &= validateFirstname();
+          isValid &= validateSSN();
+          // etc...
+      
+          return !!isValid; // Ensures true/false return
+      }
 
     // Submit Button Control
     const submitBtn = document.createElement('input');
