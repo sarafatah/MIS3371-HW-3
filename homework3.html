@@ -77,15 +77,13 @@ Description: patient registration form
                 </tr>
 
                 <!-- SSN -->
-                <tr>
-                    <td class="td1"><label for="ssn">Social Security:</label></td>
-                    <td>
-                        <input type="password" name="ssn" id="ssn" maxlength="11" required>
-                         <span class="error-message" id="ssnError"></span>
-                    </td>
-                    
-                </tr>
+                 <div class="form-group">
+                    <label for="ssn">Social Security:</label>
+                    <input type="password" id="ssn" title="Format: XXX-XX-XXXX" required>
+                    <span class="error-message" id="ssnError"></span>
+                </div>
 
+                
                 <!-- ADDRESS -->
                 <tr>
                     <td class="td1"><label for="address1">Address Line 1:</label></td>
