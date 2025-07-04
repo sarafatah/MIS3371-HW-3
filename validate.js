@@ -301,7 +301,96 @@ document.addEventListener("DOMContentLoaded", function () {
             maxPriceLabel.textContent = formatCurrency(maxPriceSlider.value);
         });
     }
+     document.addEventListener("DOMContentLoaded", function() {
+    // Get form elements
+    const form = document.getElementById("registrationForm");
+    const validateBtn = document.getElementById("validateButton");
+    const submitBtnContainer = document.getElementById("submitBtnContainer"); // Add this container in your HTML
 
+    // Create submit button programmatically (hidden by default)
+    const submitBtn = document.createElement("button");
+    submitBtn.type = "submit";
+    submitBtn.textContent = "Submit";
+    submitBtn.className = "btn btn-primary";
+    submitBtn.style.display = "none";
+    submitBtnContainer.appendChild(submitBtn);
+
+    // Validate Button Click Handler
+    validateBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        
+        // Run all validation functions
+        const allValid = validateAllFields();
+        
+        // Show/hide submit button based on validation
+        submitBtn.style.display = allValid ? "block" : "none";
+        
+        // Feedback to user
+        if (allValid) {
+            alert("All fields are valid! You may now submit the form.");
+        } else {
+            alert("Please correct the errors before submitting.");
+        }
+    });
+
+    // Master validation function
+    function validateAllFields() {
+        let allValid = true;
+        
+        // Required fields validation
+        if (!validateFirstName()) allValid = false;
+        if (!validateLastName()) allValid = false;
+        if (!validateEmail()) allValid = false;
+        // Add all other required field validations
+        
+        // Optional fields validation (only if not empty)
+        if (midInitialInput.value && !validateMiddleInitial()) allValid = false;
+        if (dobInput.value && !validateDOB()) allValid = false;
+        // Add all other optional field validations
+        
+        return allValid;
+    }
+
+    // Individual validation functions (examples)
+    function validateFirstName() {
+        const value = firstnameInput.value.trim();
+        const validPattern = /^[a-zA-Z' -]+$/;
+        
+        if (!value) {
+            firstnameError.textContent = "First name is required";
+            return false;
+        }
+        
+        if (!validPattern.test(value)) {
+            firstnameError.textContent = "Only letters, spaces, apostrophes and hyphens allowed";
+            return false;
+        }
+        
+        firstnameError.textContent = "";
+        return true;
+    }
+
+    function validateEmail() {
+        const value = emailInput.value.trim().toLowerCase();
+        emailInput.value = value; // Force lowercase
+        const validPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (!value) {
+            emailError.textContent = "Email is required";
+            return false;
+        }
+        
+        if (!validPattern.test(value)) {
+            emailError.textContent = "Invalid email format";
+            return false;
+        }
+        
+        emailError.textContent = "";
+        return true;
+    }
+
+    // Add all other validation functions...
+});
     // Form validation check
     function isFormValid() {
         return validatePassword() && 
