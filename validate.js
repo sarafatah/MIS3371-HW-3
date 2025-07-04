@@ -34,6 +34,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const reviewBtn = document.getElementById("reviewButton");
     const modal = document.getElementById("reviewModal");
     const reviewContent = document.getElementById("reviewContent");
+    const validateBtn = document.getElementById("validateButton");
+    const submitBtn = document.getElementById("submitButton");
+    submitBtn.style.display = "none"; // Hide submit button initially
 
     /* ========== Input Validations ========== */
 
@@ -388,8 +391,6 @@ document.addEventListener("DOMContentLoaded", function () {
         emailError.textContent = "";
         return true;
     }
-
-    // Add all other validation functions...
 });
     // Form validation check
     function isFormValid() {
@@ -402,7 +403,43 @@ document.addEventListener("DOMContentLoaded", function () {
                ssnInput.value.length === 11 &&
                userIdInput.value.length >= 5;
     }
+         /* ===== VALIDATE BUTTON FUNCTIONALITY ===== */
+    validateBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        
+        const allValid = validateAllFields();
+        submitBtn.style.display = allValid ? "block" : "none";
+        reviewBtn.disabled = !allValid;
+        
+        if (allValid) {
+            alert("All fields are valid! You may now review or submit.");
+        } else {
+            alert("Please fix the highlighted errors.");
+            const firstError = document.querySelector('.error:not(:empty)');
+            if (firstError) firstError.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
 
+    /* ===== MASTER VALIDATION FUNCTION ===== */
+    function validateAllFields() {
+        let allValid = true;
+        
+        // Required fields
+        if (!validateFirstName()) allValid = false;
+        if (!validateLastName()) allValid = false;
+        if (!validateEmail()) allValid = false;
+        if (!validateUserId()) allValid = false;
+        if (!validatePassword()) allValid = false;
+        if (!validateConfirmPassword()) allValid = false;
+        
+        // Optional fields
+        if (document.getElementById("midinitial").value && !validateMiddleInitial()) allValid = false;
+        if (document.getElementById("dob").value && !validateDOB()) allValid = false;
+        if (document.getElementById("ssn").value && !validateSSN()) allValid = false;
+        if (document.getElementById("zip").value && !validateZip()) allValid = false;
+        
+        return allValid;
+    }
     // Review Button Click (Show Modal with Summary)
     if (reviewBtn && modal && reviewContent) {
         reviewBtn.addEventListener("click", function () {
@@ -455,9 +492,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Submit function
-    window.confirmSubmit = function () {
-        if (modal) modal.style.display = "none";
-        if (reviewBtn) reviewBtn.disabled = true;
-        if (form) form.submit();
+        window.confirmSubmit = function () {
+        if (validateAllFields()) {
+            modal.style.display = "none";
+            reviewBtn.disabled = true;
+            form.submit();
+        } else {
+            alert("Please fix all errors before submitting.");
+        }
     };
-});
