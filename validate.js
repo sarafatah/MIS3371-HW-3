@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
     submitBtn.style.display = "none";
     reviewBtn.disabled = true;
 
-    /* ========== Input Validations ========== */
+    /* Input Validations */
     
     // Cache all input and error elements
     const firstnameInput = document.getElementById("firstname");
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const maxPriceSlider = document.getElementById("maxPrice");
     const maxPriceLabel = document.getElementById("maxPriceLabel");
 
-    /* ========== VALIDATION FUNCTIONS ========== */
+    /*  VALIDATION FUNCTIONS */
 
     function validateFirstName() {
         const value = firstnameInput.value.trim();
@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return true;
     }
 
-    /* ========== VALIDATE BUTTON FUNCTIONALITY ========== */
+    /* VALIDATE BUTTON FUNCTIONALITY */
     validateBtn.addEventListener("click", function(e) {
         e.preventDefault();
         
@@ -382,7 +382,7 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.style.display = "block";
     });
 
-    /* ========== FORM SUBMISSION ========== */
+    /*  FORM SUBMISSION  */
     form.addEventListener("submit", function(e) {
         if (!validateAllFields()) {
             e.preventDefault();
