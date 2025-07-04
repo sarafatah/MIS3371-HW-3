@@ -48,32 +48,30 @@ if (validateBtn) {
 
 
   // --- SSN Auto-formatting and Masking ---
-  const ssnInput = document.getElementById("ssn");
-  const ssnError = document.getElementById("ssnError");
-  let originalSSN = "";
+ssnInput.addEventListener("input", () => {
+  let digits = ssnInput.value.replace(/\D/g, "").slice(0, 9); // keep only digits
+  let formatted = "";
 
-  if (ssnInput && ssnError) {
-    ssnInput.addEventListener("input", () => {
-      let digits = ssnInput.value.replace(/\D/g, "");
-      if (digits.length > 9) digits = digits.slice(0, 9);
+  if (digits.length > 0) {
+    formatted += digits.slice(0, 3);
+  }
+  if (digits.length >= 4) {
+    formatted += "-" + digits.slice(3, 5);
+  }
+  if (digits.length >= 6) {
+    formatted += "-" + digits.slice(5, 9);
+  }
 
-      let formatted = digits;
-      if (digits.length > 5) {
-        formatted = `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
-      } else if (digits.length > 3) {
-        formatted = `${digits.slice(0, 3)}-${digits.slice(3)}`;
-      }
+  ssnInput.value = formatted;
+  originalSSN = formatted;
 
-      ssnInput.value = formatted;
-      originalSSN = formatted;
-
-      const validPattern = /^\d{3}-\d{2}-\d{4}$/;
-      if (formatted.length === 11 && !validPattern.test(formatted)) {
-        ssnError.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
-      } else {
-        ssnError.textContent = "";
-      }
-    });
+  const validPattern = /^\d{3}-\d{2}-\d{4}$/;
+  if (formatted.length === 11 && !validPattern.test(formatted)) {
+    ssnError.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
+  } else {
+    ssnError.textContent = "";
+  }
+});
 
     ssnInput.addEventListener("blur", () => {
       if (originalSSN.length === 11) {
