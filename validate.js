@@ -49,29 +49,28 @@ if (validateBtn) {
 
   // --- SSN Auto-formatting and Masking ---
 ssnInput.addEventListener("input", () => {
-  let digits = ssnInput.value.replace(/\D/g, "").slice(0, 9); // keep only digits
-  let formatted = "";
+  const digits = ssnInput.value.replace(/\D/g, "").slice(0, 9);
+  let formattedSSN = "";
 
-  if (digits.length > 0) {
-    formatted += digits.slice(0, 3);
-  }
-  if (digits.length >= 4) {
-    formatted += "-" + digits.slice(3, 5);
-  }
   if (digits.length >= 6) {
-    formatted += "-" + digits.slice(5, 9);
+    formattedSSN = `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
+  } else if (digits.length >= 4) {
+    formattedSSN = `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  } else {
+    formattedSSN = digits;
   }
 
-  ssnInput.value = formatted;
-  originalSSN = formatted;
+  ssnInput.value = formattedSSN;
 
   const validPattern = /^\d{3}-\d{2}-\d{4}$/;
-  if (formatted.length === 11 && !validPattern.test(formatted)) {
-    ssnError.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
-  } else {
+  if (validPattern.test(formattedSSN)) {
+    originalSSN = formattedSSN;
     ssnError.textContent = "";
+  } else {
+    ssnError.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
   }
 });
+
 
     ssnInput.addEventListener("blur", () => {
       if (originalSSN.length === 11) {
