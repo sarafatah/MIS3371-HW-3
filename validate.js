@@ -1,29 +1,4 @@
-/*
- Name: Sara Fatah
- Date Created: 06/18/25
- Date Updated: 07/03/25
- Purpose: Validate form fields, display review modal, and handle form submission
-*/
-
-document.addEventListener("DOMContentLoaded", () => {
-  // --- Helper Functions ---
-  const getValue = (id) => document.getElementById(id)?.value.trim() || "";
-  const getCheckedValues = (name) =>
-    Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
-      .map(cb => cb.value).join(", ");
-  const getSelectedRadio = (name) => {
-    const selected = document.querySelector(`input[name="${name}"]:checked`);
-    return selected ? selected.value : "Not selected";
-  };
-  const formatCurrency = (value) => new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0
-  }).format(value);
-
-  const form = document.getElementById("registrationForm");
-  const reviewBtn = document.getElementById("reviewButton");
-  const modal = document.getElementById("reviewModal");
+ const modal = document.getElementById("reviewModal");
   const reviewContent = document.getElementById("reviewContent");
   const submitBtn = document.getElementById("submitBtn");
   const validateBtn = document.getElementById("validateBtn");
@@ -48,29 +23,32 @@ if (validateBtn) {
 
 
   // --- SSN Auto-formatting and Masking ---
-ssnInput.addEventListener("input", () => {
-  const digits = ssnInput.value.replace(/\D/g, "").slice(0, 9);
-  let formattedSSN = "";
+  const ssnInput = document.getElementById("ssn");
+  const ssnError = document.getElementById("ssnError");
+  let originalSSN = "";
 
-  if (digits.length >= 6) {
-    formattedSSN = `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
-  } else if (digits.length >= 4) {
-    formattedSSN = `${digits.slice(0, 3)}-${digits.slice(3)}`;
-  } else {
-    formattedSSN = digits;
-  }
+  if (ssnInput && ssnError) {
+    ssnInput.addEventListener("input", () => {
+      let digits = ssnInput.value.replace(/\D/g, "");
+      if (digits.length > 9) digits = digits.slice(0, 9);
 
-  ssnInput.value = formattedSSN;
+      let formatted = digits;
+      if (digits.length > 5) {
+        formatted = `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
+      } else if (digits.length > 3) {
+        formatted = `${digits.slice(0, 3)}-${digits.slice(3)}`;
+      }
 
-  const validPattern = /^\d{3}-\d{2}-\d{4}$/;
-  if (validPattern.test(formattedSSN)) {
-    originalSSN = formattedSSN;
-    ssnError.textContent = "";
-  } else {
-    ssnError.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
-  }
-});
+      ssnInput.value = formatted;
+      originalSSN = formatted;
 
+      const validPattern = /^\d{3}-\d{2}-\d{4}$/;
+      if (formatted.length === 11 && !validPattern.test(formatted)) {
+        ssnError.textContent = "Invalid SSN format. Use XXX-XX-XXXX.";
+      } else {
+        ssnError.textContent = "";
+      }
+    });
 
     ssnInput.addEventListener("blur", () => {
       if (originalSSN.length === 11) {
