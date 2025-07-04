@@ -165,6 +165,45 @@ document.addEventListener("DOMContentLoaded", function () {
             zipError.textContent = validPattern.test(inputValue) ? "" : "ZIP code must be 5 digits or in ZIP+4 format (12345 or 12345-6789).";
         });
     }
+            // Address Line 1
+      const address1Input = document.getElementById("address1");
+      const address1Error = document.getElementById("address1Error");
+      if (address1Input && address1Error) {
+          address1Input.addEventListener("input", function () {
+              if (address1Input.value.trim() === "") {
+                  address1Error.textContent = "Address Line 1 is required.";
+              } else {
+                  address1Error.textContent = "";
+              }
+          });
+      }
+      
+      // City
+      const cityInput = document.getElementById("city");
+      const cityError = document.getElementById("cityError");
+      if (cityInput && cityError) {
+          cityInput.addEventListener("input", function () {
+              const pattern = /^[a-zA-Z\s'-]+$/;
+              if (!pattern.test(cityInput.value)) {
+                  cityError.textContent = "Only letters, spaces, apostrophes, and dashes allowed.";
+              } else {
+                  cityError.textContent = "";
+              }
+          });
+      }
+      
+      // State
+      const stateInput = document.getElementById("state");
+      const stateError = document.getElementById("stateError");
+      if (stateInput && stateError) {
+          stateInput.addEventListener("change", function () {
+              if (!stateInput.value) {
+                  stateError.textContent = "State is required.";
+              } else {
+                  stateError.textContent = "";
+              }
+          });
+      }
 
     // User ID
     const userIdInput = document.getElementById("userid");
